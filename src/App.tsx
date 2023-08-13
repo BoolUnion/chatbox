@@ -23,7 +23,6 @@ import CleanWidnow from './CleanWindow';
 import AboutWindow from './AboutWindow';
 import { ThemeSwitcherProvider } from './theme/ThemeSwitcher';
 import { useTranslation } from "react-i18next";
-import icon from './icon.png'
 import appicon from './appicon.png'
 import { save } from '@tauri-apps/api/dialog';
 import { writeTextFile } from '@tauri-apps/api/fs';
