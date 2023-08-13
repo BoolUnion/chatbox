@@ -58,17 +58,20 @@ export async function replay(
     let fullText = '';
     try {
         const messages = prompts.map(msg => ({ role: msg.role, content: msg.content }))
-        const response = await fetch(`${host}/v1/chat/completions`, {
+        const response = await fetch('https://boolunion.openai.azure.com/openai/deployments/gpt/chat/completions?api-version=2023-03-15-preview', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${apiKey}`,
+                'api-key': '6aa97d666aa241d0804e9cc76d9c24a4',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 messages,
-                model: modelName,
-                max_tokens: maxTokensNumber,
-                temperature,
+                max_tokens: 800,
+                temperature: 0.5,
+                top_p: 0.95,
+                stop: null,
+                frequency_penalty: 0,
+                presence_penalty: 0,
                 stream: true,
             }),
             signal: controller.signal,
@@ -140,4 +143,15 @@ export async function* iterableStreamAsync(stream: ReadableStream): AsyncIterabl
     } finally {
         reader.releaseLock()
     }
+}
+
+export function fetchSessionFromCloud() {
+    console.log("fetchSessionFromCloud!")
+    fetch('http://localhost:3001/icloud/entities').then((response) => {
+        return response.json();
+    }).then(data => {
+        console.log("fetchSessionFromCloud success: " + JSON.stringify(data));
+    }).catch((error) => {
+        console.log("fetchSessionFromCloud failed: " + error);
+    });   
 }

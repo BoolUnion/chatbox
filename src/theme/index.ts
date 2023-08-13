@@ -18,6 +18,9 @@ export function fetchThemeDesign(mode: RealThemeMode, fontSize: number): ThemeOp
     return {
         palette: {
             mode: ThemeModeMapPaletteMode[mode],
+            primary: {
+                main: '#2DB462'
+            },
             ...(mode === ThemeMode.Light
                 ? {
                 }

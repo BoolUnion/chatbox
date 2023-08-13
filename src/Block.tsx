@@ -8,8 +8,8 @@ import {
 } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import PersonIcon from '@mui/icons-material/Person';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
-import SettingsIcon from '@mui/icons-material/Settings';
+import MoodIcon from '@mui/icons-material/Mood';
+import LensIcon from '@mui/icons-material/Lens';
 import MarkdownIt from 'markdown-it'
 import mdKatex from '@traptitech/markdown-it-katex'
 import hljs from 'highlight.js'
@@ -149,22 +149,22 @@ function _Block(props: Props) {
                                 id={msg.id + 'select'}
                             >
                                 <MenuItem value={OpenAIRoleEnum.System}>
-                                    <Avatar ><SettingsIcon /></Avatar>
+                                    <Avatar ><LensIcon /></Avatar>
                                 </MenuItem>
                                 <MenuItem value={OpenAIRoleEnum.User}>
                                     <Avatar><PersonIcon /></Avatar>
                                 </MenuItem>
                                 <MenuItem value={OpenAIRoleEnum.Assistant}>
-                                    <Avatar><SmartToyIcon /></Avatar>
+                                    <Avatar><MoodIcon /></Avatar>
                                 </MenuItem>
                             </Select>
                         ) : (
                             <Box sx={{ marginTop: '8px' }}>
                                 {
                                     {
-                                        assistant: <Avatar><SmartToyIcon /></Avatar>,
+                                        assistant: <Avatar><MoodIcon /></Avatar>,
                                         user: <Avatar><PersonIcon /></Avatar>,
-                                        system: <Avatar><SettingsIcon /></Avatar>
+                                        system: <Avatar><LensIcon /></Avatar>
                                     }[msg.role]
                                 }
                             </Box>

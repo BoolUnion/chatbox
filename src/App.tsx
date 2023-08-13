@@ -24,6 +24,7 @@ import AboutWindow from './AboutWindow';
 import { ThemeSwitcherProvider } from './theme/ThemeSwitcher';
 import { useTranslation } from "react-i18next";
 import icon from './icon.png'
+import appicon from './appicon.png'
 import { save } from '@tauri-apps/api/dialog';
 import { writeTextFile } from '@tauri-apps/api/fs';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
@@ -51,6 +52,20 @@ import {
 } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableItem } from './SortableItem';
+import { createTheme, useThemeProps } from '@mui/material/styles';
+import { purple } from '@mui/material/colors';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: purple[500],
+    },
+    secondary: {
+      main: '#f44336',
+    },
+  },
+});
+
 
 function Main() {
     const { t } = useTranslation()
@@ -188,16 +203,6 @@ function Main() {
         }
         messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     };
-
-    // 会话名称自动生成
-    useEffect(() => {
-        if (
-            store.currentSession.name === 'Untitled'
-            && store.currentSession.messages.findIndex(msg => msg.role === 'assistant') !== -1
-        ) {
-            generateName(store.currentSession)
-        }
-    }, [store.currentSession.messages])
 
     const codeBlockCopyEvent = useRef((e: Event) => {
         const target: HTMLElement = e.target as HTMLElement;
@@ -340,162 +345,6 @@ function Main() {
             <Grid container sx={{
                 height: '100%',
             }}>
-                {showMenu && (
-                <Grid item
-                    sx={{
-                        height: '100%',
-                        [theme.breakpoints.down("sm")]: {
-                            position: 'absolute',
-                            zIndex: 100,
-                            left: '20px',
-                            right: 0,
-                            bottom: 0,
-                            top: 0,
-                        },
-                    }}
-                >
-                    <Stack
-                        className='ToolBar'
-                        sx={{
-                            width: '210px',
-                            height: '100%',
-                            [theme.breakpoints.down("sm")]: {
-                                position: 'absolute',
-                                zIndex: 1,
-                            },
-                        }}
-                        spacing={2}
-                    >
-                        <Toolbar variant="dense" sx={{
-                            display: "flex",
-                            alignItems: "flex-end",
-                        }} >
-                            <img src={icon} style={{
-                                width: '35px',
-                                height: '35px',
-                                marginRight: '5px',
-                            }} />
-                            <Typography variant="h5" color="inherit" component="div" style={{fontSize: '26px'}}>
-                                Chatbox
-                            </Typography>
-                        </Toolbar>
-
-                        <MenuList
-                            sx={{
-                                width: '100%',
-                                position: 'relative',
-                                overflow: 'auto',
-                                height: '60vh',
-                                '& ul': { padding: 0 },
-                            }}
-                            className="scroll"
-                            subheader={
-                                <ListSubheader component="div">
-                                    {t('chat')}
-                                </ListSubheader>
-                            }
-                            component="div"
-                            ref={sessionListRef}
-                        >
-                            <DndContext
-                                modifiers={[restrictToVerticalAxis]}
-                                sensors={sensors}
-                                collisionDetection={closestCenter}
-                                onDragEnd={handleDragEnd}
-                            >
-                                <SortableContext items={sortedSessions} strategy={verticalListSortingStrategy}>
-                                {
-                                    sortedSessions.map((session, ix) => (
-                                        <SortableItem key={session.id} id={session.id}>
-                                            <SessionItem key={session.id}
-                                                selected={store.currentSession.id === session.id}
-                                                session={session}
-                                                switchMe={() => {
-                                                    store.switchCurrentSession(session)
-                                                    textareaRef?.current?.focus()
-                                                }}
-                                                deleteMe={() => store.deleteChatSession(session)}
-                                                copyMe={() => {
-                                                    const newSession = createSession(session.name + ' copied')
-                                                    newSession.messages = session.messages
-                                                    store.createChatSession(newSession, ix)
-                                                }}
-                                                switchStarred={() => {
-                                                    store.updateChatSession({
-                                                        ...session,
-                                                        starred: !session.starred
-                                                    })
-                                                }}
-                                                editMe={() => setConfigureChatConfig(session)}
-                                            />
-                                        </SortableItem>
-                                    ))
-                                }
-                                </SortableContext>
-                            </DndContext>
-                        </MenuList>
-
-                        <Divider />
-
-                        <MenuList>
-                            <MenuItem onClick={handleCreateNewSession} >
-                                <ListItemIcon>
-                                    <IconButton><AddIcon fontSize="small" /></IconButton>
-                                </ListItemIcon>
-                                <ListItemText>
-                                    {t('new chat')}
-                                </ListItemText>
-                                <Typography variant="body2" color="text.secondary">
-                                    {/* ⌘N */}
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem onClick={() => {
-                                setOpenSettingWindow(true)
-                            }}
-                            >
-                                <ListItemIcon>
-                                    <IconButton><SettingsIcon fontSize="small" /></IconButton>
-                                </ListItemIcon>
-                                <ListItemText>
-                                    {t('settings')}
-                                </ListItemText>
-                                <Typography variant="body2" color="text.secondary">
-                                    {/* ⌘N */}
-                                </Typography>
-                            </MenuItem>
-
-                            <MenuItem onClick={() => setOpenAboutWindow(true)}>
-                                <ListItemIcon>
-                                    <IconButton>
-                                        <InfoOutlinedIcon fontSize="small" />
-                                    </IconButton>
-                                </ListItemIcon>
-                                <ListItemText>
-                                    <Badge color="primary" variant="dot" invisible={!store.needCheckUpdate}
-                                    sx={{ paddingRight: '8px' }} >
-                                        <Typography sx={{ opacity: 0.5 }}>
-                                            {t('About')} ({store.version})
-                                        </Typography>
-                                    </Badge>
-                                </ListItemText>
-                            </MenuItem>
-                        </MenuList>
-                    </Stack>
-                    <Box
-                        onClick={() => setShowMenu(false)}
-                        sx={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                            [theme.breakpoints.up("sm")]: {
-                                display: 'none',
-                            },
-                        }}
-                    ></Box>
-                </Grid>)}
                 <Grid item xs
                     sx={{
                         width: '0px',
@@ -506,18 +355,9 @@ function Main() {
                         height: '100%',
                         position: 'relative',
                     }} >
-                        <Toolbar style={{padding: '0 10px'}}>
-                            <IconButton onClick={() => setShowMenu(!showMenu)} >
-                                {
-                                    !showMenu ? (
-                                        <img src={icon} style={{
-                                            width: '30px',
-                                            height: '30px',
-                                        }} />
-                                    ) : (
-                                        <MenuOpenIcon style={{fontSize: '26px'}} />
-                                    )
-                                }
+                        <Toolbar style={{padding: '0'}}>
+                            <IconButton>
+                                <img src={appicon} style={{ width: '40px', height: '40px' }} />
                             </IconButton>
                             <Typography variant="h6" color="inherit" component="div" noWrap
                                 sx={{
@@ -526,8 +366,8 @@ function Main() {
                                     textOverflow: 'ellipsis',
                                 }}
                             >
-                                <span onClick={() => { editCurrentSession() }} style={{ cursor: 'pointer' }}>
-                                    {store.currentSession.name}
+                                <span style={{ cursor: 'pointer', paddingLeft: '16px' }}>
+                                    {t('Completions')}
                                 </span>
                             </Typography>
                             <SponsorChip sessionId={store.currentSession.id} />
@@ -536,10 +376,16 @@ function Main() {
                             >
                                 <CleaningServicesIcon />
                             </IconButton>
-                            <IconButton edge="start" color="inherit" aria-label="menu" sx={{}}
+                            <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}
                                 onClick={() => saveSession(store.currentSession)}
                             >
                                 <Save />
+                            </IconButton>
+                            <IconButton edge="start" color="inherit" aria-label="menu" sx={{}}
+                                onClick={() => {
+                                setOpenSettingWindow(true)
+                            }}>
+                                <SettingsIcon />
                             </IconButton>
                         </Toolbar>
                         <List
