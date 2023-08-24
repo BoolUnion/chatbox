@@ -60,7 +60,7 @@ export async function writeConfig(config: Config) {
 
 // session store
 
-export async function readSessions(settings: Settings): Promise<Session[]> {
+export async function readSessions(): Promise<Session[]> {
     let sessions: Session[] | undefined = await api.readStore('chat-sessions')
     if (!sessions) {
         return defaults.sessions
@@ -133,7 +133,7 @@ export default function useStore() {
     const [chatSessions, _setChatSessions] = useState<Session[]>([createSession()])
     const [currentSession, switchCurrentSession] = useState<Session>(chatSessions[0])
     useEffect(() => {
-        readSessions(settings).then((sessions: Session[]) => {
+        readSessions().then((sessions: Session[]) => {
             _setChatSessions(sessions)
             switchCurrentSession(sessions[0])
         })

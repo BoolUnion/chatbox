@@ -614,9 +614,8 @@ function MessageInput(props: {
                         />
                     </Grid>
                     <Grid item xs='auto'>
-                        <Button type='submit' variant="contained" size='large'
-                            style={{ padding: '15px 16px' }}>
-                                <SendIcon />
+                        <Button type='submit' variant="contained" size='large' style={{ padding: '15px 16px' }}>
+                            <SendIcon />
                         </Button>
                     </Grid>
                 </Grid>
@@ -642,7 +641,7 @@ function sortSessions(sessions: Session[]): Session[] {
 export default function App() {
     return (
         <ThemeSwitcherProvider>
-            <Main />
+            {/* <Main /> */}
         </ThemeSwitcherProvider>
     )
 }
