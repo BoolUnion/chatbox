@@ -619,7 +619,10 @@ function MessageInput(props: {
                         </Button>
                     </Grid>
                 </Grid>
-                <Typography variant='caption' style={{ opacity: 0.3 }}>{t('[Enter] send, [Shift+Enter] line break, [Ctrl+Enter] send without generating')}</Typography>
+                <Typography variant='caption' style={{ opacity: 0.3, display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                    {t('[Enter] send, [Shift+Enter] line break, [Ctrl+Enter] send without generating')}
+                    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2023021980号-1</a>
+                </Typography>
             </Stack>
         </form>
     )
@@ -641,7 +644,7 @@ function sortSessions(sessions: Session[]): Session[] {
 export default function App() {
     return (
         <ThemeSwitcherProvider>
-            {/* <Main /> */}
+            <Main />
         </ThemeSwitcherProvider>
     )
 }
