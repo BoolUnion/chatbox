@@ -24,6 +24,7 @@ import AboutWindow from './AboutWindow';
 import { ThemeSwitcherProvider } from './theme/ThemeSwitcher';
 import { useTranslation } from "react-i18next";
 import appicon from './appicon.png'
+import beianicon from './beian.png'
 import { save } from '@tauri-apps/api/dialog';
 import { writeTextFile } from '@tauri-apps/api/fs';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
@@ -620,8 +621,13 @@ function MessageInput(props: {
                     </Grid>
                 </Grid>
                 <Typography variant='caption' style={{ opacity: 0.3, display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                    {t('[Enter] send, [Shift+Enter] line break, [Ctrl+Enter] send without generating')}
-                    <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2023021980号-1</a>
+                    <p>{t('[Enter] send, [Shift+Enter] line break, [Ctrl+Enter] send without generating')}</p>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: '331px' }}>
+                        <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502053418" target="_blank" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginRight: '20px' }}>
+                            <img src={beianicon} /><p>京公网安备 11010502053418号</p>
+                        </a>
+                        <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2023021980号-1</a>
+                    </div>
                 </Typography>
             </Stack>
         </form>
