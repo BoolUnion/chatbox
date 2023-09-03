@@ -620,9 +620,9 @@ function MessageInput(props: {
                         </Button>
                     </Grid>
                 </Grid>
-                <Typography variant='caption' style={{ opacity: 0.3, display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                <Typography variant='caption' style={{ opacity: 0.3, display: 'flex', flexDirection: 'column', width: '100%' }}>
                     <p>{t('[Enter] send, [Shift+Enter] line break, [Ctrl+Enter] send without generating')}</p>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: '331px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502053418" target="_blank" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginRight: '20px' }}>
                             <img src={beianicon} /><p>京公网安备 11010502053418号</p>
                         </a>
