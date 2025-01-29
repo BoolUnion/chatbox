@@ -58,11 +58,12 @@ export async function replay(
     let fullText = '';
     try {
         const messages = prompts.map(msg => ({ role: msg.role, content: msg.content }))
-        const response = await fetch('https://boolunion.openai.azure.com/openai/deployments/gpt/chat/completions?api-version=2023-03-15-preview', {
+        const response = await fetch('https://api.deepseek.com/chat/completions', {
             method: 'POST',
             headers: {
-                'api-key': '6aa97d666aa241d0804e9cc76d9c24a4',
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer sk-78c71a2d797a4275bb38a6d3b212cf87'
             },
             body: JSON.stringify({
                 messages,
@@ -73,6 +74,7 @@ export async function replay(
                 frequency_penalty: 0,
                 presence_penalty: 0,
                 stream: true,
+                model: 'deepseek-chat'
             }),
             signal: controller.signal,
         });
